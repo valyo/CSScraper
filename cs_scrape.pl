@@ -6,8 +6,10 @@ use YAML;
 use Web::Scraper;
 binmode STDOUT, ":utf8";
 
+open(SESAME, ">cs_scrape.csv");
 # number of molecules 
 my $n = 125000;
+#my $n = 5;
 
 # scraper block
 my $list = scraper {
@@ -18,9 +20,9 @@ my $list = scraper {
 };
 
 # print start date and time
-print scalar(localtime(time + 0)), "\n";
+print SESAME scalar(localtime(time + 0)), "\n";
 # print column names
-say join ",","SMILES","logP","logD","ChemSpiderID",;
+say SESAME join ",","SMILES","logP","logD","ChemSpiderID",;
 for (my $i = 1; $i <= $n; $i++){
 	my $t = int(rand(4)) + 4;
 	sleep($t) unless $i == 1;
@@ -40,7 +42,7 @@ for (my $i = 1; $i <= $n; $i++){
 	}
 	$logP =~ s/^\s+|\s+$//g;
 	$logD =~ s/^\s+|\s+$//g;
-	say join ",", $details, $logP, $logD, $xxx,;
+	say SESAME join ",", $details, $logP, $logD, $xxx,;
 }
 # print end date and time
-print scalar(localtime(time + 0)), "\n";
+print SESAME scalar(localtime(time + 0)), "\n";
