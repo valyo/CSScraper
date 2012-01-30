@@ -7,10 +7,12 @@ use Web::Scraper;
 binmode STDOUT, ":utf8";
 
 open(SESAME, ">cs_scrape.csv");
+binmode SESAME, ":utf8";
 # number of molecules 
 my $n = 125000;
 #my $n = 5;
 
+my $listres;
 # scraper block
 my $list = scraper {
 	process "._quick-comp-ids", "rec_details" => 'TEXT';
@@ -27,7 +29,8 @@ for (my $i = 1; $i <= $n; $i++){
 	my $t = int(rand(4)) + 4;
 	sleep($t) unless $i == 1;
 	my $xxx = int(rand(25000000)) + 1;
-	my $listres = Dump($list->scrape( URI->new("http://www.chemspider.com/Chemical-Structure.$xxx.html") ));
+	$listres = eval ('Dump($list->scrape( URI->new("http://www.chemspider.com/Chemical-Structure.$xxx.html") ))');
+	next if !$listres;
 	my $h2 = Load(join "", $listres) or die $!;
 	next unless my $details = $h2->{rec_details};
 	my $start = index($details, "SMILES:");
